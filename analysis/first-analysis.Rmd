@@ -1,0 +1,39 @@
+---
+title: "first analysis"
+output: html_document
+---
+
+```{r}
+#some random analysis
+
+time <- 1:100
+data <- 1:100 #seq(1,1,length.out=100)
+for (i in data){
+  data[i]<- runif(1)*100
+}
+
+plot(time,data, type = "l", main="data over time")
+```
+
+
+```{r}
+library(ggplot2)                                            ## Load package
+setwd("~/Desktop/myproject/analysis")
+assoc_QC2 <- read.table("assoc_QC2.assoc",header=TRUE)       ## Read in data
+assoc_QC2 <- subset(assoc_QC2, P != "NA")                    ## Trim data
+assoc_QC2$SNP <- as.character(assoc_QC2$SNP)                 ## Change SNP column to correct format
+
+#Reads appropriate data for plotting into object 'manhattan'
+manhattan <- ggplot(assoc_QC2, aes(BP,-log(P),group=factor(CHR),color=factor(CHR)))  
+
+#Sets the bonferroni-corrected threshold
+bonferroni <- -log(0.05/length(assoc_QC2$P))
+
+#Sets a color scheme for the chromosomes w/ hex codes, these can also be coded with plaintext names (i.e. "red")
+our_colors <- c("#FF0000", "#a6cee3","#0000FF","#1f78b4", "#00FF00","#b2df8a","#33a02c","#fb9a99","#91003f","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#d95f0e","#377eb8","#4d4d4d","#999999","#dd1c77","#542788","#c994c7")
+
+#Plots the data with all the aesthetic and plotting options
+manhattan + geom_point(aes(size=0.5,alpha=0.05)) + scale_y_continuous(limits=c(0,15)) + geom_hline(yintercept=bonferroni, lty=2) + xlab("SNP Position (Chromosomes Ordered 1-22)") + ylab("Association Significance (-ln(p-value))") + scale_colour_manual(values = our_colors)
+
+
+```
