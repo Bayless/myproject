@@ -1,0 +1,16 @@
+---
+title: "index"
+author: "Bayle Smith-Salzberg"
+date: "2019-11-12"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+
+```
+
+Click on this [link](first-analysis.html) to see my results.
